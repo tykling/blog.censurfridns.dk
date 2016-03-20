@@ -6,6 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Application definition
 INSTALLED_APPS = (
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -14,14 +15,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'bootstrap3',
     'taggit',
-    'taggit_templatetags',
-    'haystack',
+    #'taggit_templatetags', # does not work with 1.9?
     'blog',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -53,12 +54,17 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
-LANGUAGE_CODE = 'en-us'
-DATETIME_FORMAT = 'd. b Y H:i e'
 TIME_ZONE = 'UTC'
-USE_I18N = False
-USE_L10N = False
+USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+
+# for django-modeltranslation
+gettext = lambda s: s
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('da', gettext('Danish')),
+)
 
 
 # Static files (CSS, JavaScript, Images)
@@ -96,13 +102,4 @@ LOGGING = {
 
 # taggit
 TAGGIT_FORCE_LOWERCASE = True
-
-# haystack
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
-    },
-}
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
